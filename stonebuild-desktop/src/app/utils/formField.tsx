@@ -8,6 +8,8 @@ import {
 
 import * as React from "react";
 
+
+
 import {
   Popover,
   PopoverTrigger,
@@ -108,13 +110,15 @@ export const FormField = ({
   onChange,
 }: Props) => {
 
-  const {
-    register,
-    control,
-    formState: {
-      errors,
-    },
-  } = useFormContext();
+const {
+  register,
+  control,
+  clearErrors,
+  formState: {
+    errors,
+  },
+} = useFormContext();
+
 
   const error =
     errors[name];
@@ -366,9 +370,13 @@ export const FormField = ({
                   );
               }
 
-              field.onChange(
-                value
-              );
+      field.onChange(value);
+
+onChange?.(value);
+
+if (value?.toString().trim()) {
+  clearErrors(name);
+}
             };
 
             return (

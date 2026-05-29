@@ -265,6 +265,9 @@ const handleSubmit = async (
                     name="alternate_phone"
                     placeholder="Enter Alternate Number"
                     className="only-number limit-10"
+                     validation={
+                      validationRules.phone
+                    }
                   />
 
                 </Row>
@@ -275,6 +278,9 @@ const handleSubmit = async (
                     type="input"
                     name="email"
                     placeholder="Enter Email"
+                     validation={
+                      validationRules.email
+                    }
                   />
 
                 </Row>
@@ -296,6 +302,9 @@ const handleSubmit = async (
                     name="pincode"
                     placeholder="Enter Pincode"
                     className="only-number limit-6"
+                     validation={
+                      validationRules.pincode
+                    }
                   />
 
                 </Row>
@@ -378,6 +387,9 @@ const handleSubmit = async (
                     name="aadhaar"
                     placeholder="Enter Aadhaar Number"
                     className="only-number limit-12"
+                     validation={
+                      validationRules.aadhaar
+                    }
                   />
 
                 </Row>
@@ -389,6 +401,9 @@ const handleSubmit = async (
                     name="pan"
                     placeholder="Enter PAN Number"
                     className="alphanumeric-uppercase limit-10"
+                     validation={
+                      validationRules.pan
+                    }
                   />
 
                 </Row>

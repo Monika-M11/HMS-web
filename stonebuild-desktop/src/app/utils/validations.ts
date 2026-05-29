@@ -42,3 +42,70 @@ export const validationRules = {
   },
 
 };
+
+
+export const validateDynamicRow = (
+  values: Record<string, any>
+) => {
+
+  const errors:
+    Record<string, string> = {};
+
+  // medicine
+  if (
+    !values.medicine_name?.trim()
+  ) {
+    errors.medicine_name =
+      "Medicine required";
+  }
+
+  // unit
+  if (!values.unit?.trim()) {
+    errors.unit =
+      "Unit required";
+  }
+
+  // quantity
+  if (!values.quantity) {
+
+    errors.quantity =
+      "Quantity required";
+
+  } else if (
+    Number(values.quantity) <= 0
+  ) {
+
+    errors.quantity =
+      "Invalid quantity";
+  }
+
+  // rate
+  if (!values.rate) {
+
+    errors.rate =
+      "Rate required";
+
+  } else if (
+    Number(values.rate) <= 0
+  ) {
+
+    errors.rate =
+      "Invalid rate";
+  }
+
+  // tax optional
+  if (!values.tax) {
+
+  errors.tax =
+    "Tax required";
+
+} else if (
+  Number(values.tax) < 0 ||
+  Number(values.tax) > 100
+) {
+
+  errors.tax =
+    "Invalid tax";
+}
+  return errors;
+};

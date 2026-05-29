@@ -13,6 +13,9 @@ import { Button } from "@/components/ui/button";
 
 import { theme } from "@/theme";
 
+import { validateDynamicRow }
+from "@/app/utils/validations";
+
 type SalesRow = {
   serialNo: number;
   medicineName: string;
@@ -50,6 +53,10 @@ const customerData: Record<
 };
 
 export default function NewSales() {
+
+const [rowErrors, setRowErrors] =
+  useState<Record<string, string>>({});
+
   const methods =
     useForm<FormValues>({
       defaultValues: {
@@ -81,66 +88,90 @@ export default function NewSales() {
     );
   };
 
-  const handleAddRow = () => {
-    const values =
-      methods.getValues();
+ const handleAddRow = () => {
 
-    const quantity =
-      Number(values.quantity);
+  const values =
+    methods.getValues();
 
-    const rate =
-      Number(values.rate);
+  const errors =
+    validateDynamicRow(values);
 
-    const tax =
-      Number(values.tax || 0);
+  if (
+    Object.keys(errors).length > 0
+  ) {
 
-    const netRate =
-      rate + (rate * tax) / 100;
+    setRowErrors(errors);
 
-    const total =
-      quantity * netRate;
+    return;
+  }
 
-    const newRow: SalesRow = {
-      serialNo:
-        rows.length + 1,
+  setRowErrors({});
 
-      medicineName:
-        values.medicine_name,
+  const quantity =
+    Number(values.quantity);
 
-      unit: values.unit,
+  const rate =
+    Number(values.rate);
 
-      quantity,
+  const tax =
+    Number(values.tax || 0);
 
-      rate,
+  const netRate =
+    rate + (rate * tax) / 100;
 
-      tax,
+  const total =
+    quantity * netRate;
 
-      netRate,
+  const newRow: SalesRow = {
+    serialNo:
+      rows.length + 1,
 
-      total,
-    };
+    medicineName:
+      values.medicine_name,
 
-    setRows([
-      ...rows,
-      newRow,
-    ]);
+    unit: values.unit,
 
-    methods.setValue(
-      "medicine_name",
-      ""
-    );
+    quantity,
 
-    methods.setValue("unit", "");
+    rate,
 
-    methods.setValue(
-      "quantity",
-      ""
-    );
+    tax,
 
-    methods.setValue("rate", "");
+    netRate,
 
-    methods.setValue("tax", "");
+    total,
   };
+
+  setRows([
+    ...rows,
+    newRow,
+  ]);
+
+  methods.setValue(
+    "medicine_name",
+    ""
+  );
+
+  methods.setValue(
+    "unit",
+    ""
+  );
+
+  methods.setValue(
+    "quantity",
+    ""
+  );
+
+  methods.setValue(
+    "rate",
+    ""
+  );
+
+  methods.setValue(
+    "tax",
+    ""
+  );
+};
 
   return (
     <FormProvider {...methods}>
@@ -198,217 +229,348 @@ export default function NewSales() {
           </div>
 
           {/* SALES DETAILS */}
-          <div className="space-y-5">
+          {/* SALES DETAILS */}
+<div className="space-y-5">
 
-            <h3
-              className="text-lg font-medium"
-              style={{
-                color:
-                  theme.primaryDark,
+  <h3
+    className="text-lg font-medium"
+    style={{
+      color:
+        theme.primaryDark,
+    }}
+  >
+    Sales Details
+  </h3>
+
+  <div className="overflow-x-auto border rounded-xl">
+
+    <table className="w-full table-fixed">
+
+      <thead
+        style={{
+          background:
+            theme.primaryLight,
+        }}
+      >
+        <tr>
+
+          <th className="p-3 text-left">
+            S.No
+          </th>
+
+          <th className="p-3 text-left">
+            Medicine Name
+          </th>
+
+          <th className="p-3 text-left">
+            Unit
+          </th>
+
+          <th className="p-3 text-left">
+            Quantity
+          </th>
+
+          <th className="p-3 text-left">
+            Rate
+          </th>
+
+          <th className="p-3 text-left">
+            Tax %
+          </th>
+
+          <th className="p-3 text-left">
+            Net Rate
+          </th>
+
+          <th className="p-3 text-left">
+            Total
+          </th>
+
+        </tr>
+      </thead>
+
+      <tbody>
+
+        {/* SAVED ROWS */}
+        {rows.map((row) => (
+
+          <tr
+            key={row.serialNo}
+            className="border-t bg-white"
+          >
+
+            <td className="p-3">
+              {row.serialNo}
+            </td>
+
+            <td className="p-3">
+              {row.medicineName}
+            </td>
+
+            <td className="p-3">
+              {row.unit}
+            </td>
+
+            <td className="p-3">
+              {row.quantity}
+            </td>
+
+            <td className="p-3">
+              ₹{row.rate}
+            </td>
+
+            <td className="p-3">
+              {row.tax}%
+            </td>
+
+            <td className="p-3">
+              ₹{row.netRate.toFixed(2)}
+            </td>
+
+            <td className="p-3">
+              ₹{row.total.toFixed(2)}
+            </td>
+
+          </tr>
+        ))}
+
+        {/* INPUT ROW */}
+        <tr className="border-t bg-white">
+
+          <td className="p-2 font-medium">
+            {rows.length + 1}
+          </td>
+
+          {/* MEDICINE */}
+          <td className="p-2">
+
+            <FormField
+              type="input"
+              name="medicine_name"
+              placeholder="Medicine"
+              className={`
+                ${rowErrors.medicine_name
+                  ? "border-red-500"
+                  : ""}
+              `}
+              onChange={(value) => {
+
+                methods.setValue(
+                  "medicine_name",
+                  value
+                );
+
+                if (value.trim()) {
+
+                  setRowErrors((prev) => {
+
+                    const updated = {
+                      ...prev,
+                    };
+
+                    delete updated.medicine_name;
+
+                    return updated;
+                  });
+                }
               }}
-            >
-              Sales Details
-            </h3>
+            />
 
-            {/* HORIZONTAL TABLE INPUT */}
-            <div className="overflow-x-auto border rounded-xl">
+          </td>
 
-              <table className="w-full min-w-[1100px]">
+          {/* UNIT */}
+          <td className="p-2">
 
-                <thead
-                  style={{
-                    background:
-                      theme.primaryLight,
-                  }}
-                >
-                  <tr>
-                    <th className="p-3 text-left">
-                      Medicine Name
-                    </th>
+            <FormField
+              type="input"
+              name="unit"
+              placeholder="Unit"
+              className={`
+                ${rowErrors.unit
+                  ? "border-red-500"
+                  : ""}
+              `}
+              onChange={(value) => {
 
-                    <th className="p-3 text-left">
-                      Unit
-                    </th>
+                methods.setValue(
+                  "unit",
+                  value
+                );
 
-                    <th className="p-3 text-left">
-                      Quantity
-                    </th>
+                if (value.trim()) {
 
-                    <th className="p-3 text-left">
-                      Rate
-                    </th>
+                  setRowErrors((prev) => {
 
-                    <th className="p-3 text-left">
-                      Tax %
-                    </th>
+                    const updated = {
+                      ...prev,
+                    };
 
-                    <th className="p-3 text-left">
-                      Action
-                    </th>
-                  </tr>
-                </thead>
+                    delete updated.unit;
 
-                <tbody>
-                  <tr>
-                    <td className="p-2">
-                      <FormField
-                        type="input"
-                        name="medicine_name"
-                        placeholder="Medicine"
-                      />
-                    </td>
+                    return updated;
+                  });
+                }
+              }}
+            />
 
-                    <td className="p-2">
-                      <FormField
-                        type="input"
-                        name="unit"
-                        placeholder="Unit"
-                      />
-                    </td>
+          </td>
 
-                    <td className="p-2">
-                      <FormField
-                        type="input"
-                        name="quantity"
-                        placeholder="Qty"
-                        className="only-number"
-                      />
-                    </td>
+          {/* QUANTITY */}
+          <td className="p-2">
 
-                    <td className="p-2">
-                      <FormField
-                        type="input"
-                        name="rate"
-                        placeholder="Rate"
-                        className="numbers-decimal"
-                      />
-                    </td>
+            <FormField
+              type="input"
+              name="quantity"
+              placeholder="Qty"
+              className={`
+                only-number
+                ${rowErrors.quantity
+                  ? "border-red-500"
+                  : ""}
+              `}
+              onChange={(value) => {
 
-                    <td className="p-2">
-                      <FormField
-                        type="input"
-                        name="tax"
-                        placeholder="Tax"
-                        className="numbers-decimal"
-                      />
-                    </td>
+                methods.setValue(
+                  "quantity",
+                  value
+                );
 
-                    <td className="p-2">
-                      <Button
-                        type="button"
-                        onClick={
-                          handleAddRow
-                        }
-                      >
-                        Add Row
-                      </Button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+                if (
+                  Number(value) > 0
+                ) {
 
-          {/* SALES TABLE */}
-          <div className="overflow-x-auto border rounded-xl">
+                  setRowErrors((prev) => {
 
-            <table className="w-full">
+                    const updated = {
+                      ...prev,
+                    };
 
-              <thead
-                style={{
-                  background:
-                    theme.primaryLight,
-                }}
-              >
-                <tr>
-                  <th className="p-3 text-left">
-                    S.No
-                  </th>
+                    delete updated.quantity;
 
-                  <th className="p-3 text-left">
-                    Medicine
-                  </th>
+                    return updated;
+                  });
+                }
+              }}
+            />
 
-                  <th className="p-3 text-left">
-                    Unit
-                  </th>
+          </td>
 
-                  <th className="p-3 text-left">
-                    Qty
-                  </th>
+          {/* RATE */}
+          <td className="p-2">
 
-                  <th className="p-3 text-left">
-                    Rate
-                  </th>
+            <FormField
+              type="input"
+              name="rate"
+              placeholder="Rate"
+              className={`
+                numbers-decimal
+                ${rowErrors.rate
+                  ? "border-red-500"
+                  : ""}
+              `}
+              onChange={(value) => {
 
-                  <th className="p-3 text-left">
-                    Tax
-                  </th>
+                methods.setValue(
+                  "rate",
+                  value
+                );
 
-                  <th className="p-3 text-left">
-                    Net Rate
-                  </th>
+                if (
+                  Number(value) > 0
+                ) {
 
-                  <th className="p-3 text-left">
-                    Total
-                  </th>
-                </tr>
-              </thead>
+                  setRowErrors((prev) => {
 
-              <tbody>
-                {rows.map((row) => (
-                  <tr
-                    key={
-                      row.serialNo
-                    }
-                    className="border-t"
-                  >
-                    <td className="p-3">
-                      {row.serialNo}
-                    </td>
+                    const updated = {
+                      ...prev,
+                    };
 
-                    <td className="p-3">
-                      {
-                        row.medicineName
-                      }
-                    </td>
+                    delete updated.rate;
 
-                    <td className="p-3">
-                      {row.unit}
-                    </td>
+                    return updated;
+                  });
+                }
+              }}
+            />
 
-                    <td className="p-3">
-                      {
-                        row.quantity
-                      }
-                    </td>
+          </td>
 
-                    <td className="p-3">
-                      ₹{row.rate}
-                    </td>
+          {/* TAX */}
+          <td className="p-2">
 
-                    <td className="p-3">
-                      {row.tax}%
-                    </td>
+            <FormField
+              type="input"
+              name="tax"
+              placeholder="Tax"
+              className={`
+                numbers-decimal
+                ${rowErrors.tax
+                  ? "border-red-500"
+                  : ""}
+              `}
+              onChange={(value) => {
 
-                    <td className="p-3">
-                      ₹
-                      {row.netRate.toFixed(
-                        2
-                      )}
-                    </td>
+                methods.setValue(
+                  "tax",
+                  value
+                );
 
-                    <td className="p-3">
-                      ₹
-                      {row.total.toFixed(
-                        2
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                if (
+                  value === "" ||
+                  Number(value) >= 0
+                ) {
+
+                  setRowErrors((prev) => {
+
+                    const updated = {
+                      ...prev,
+                    };
+
+                    delete updated.tax;
+
+                    return updated;
+                  });
+                }
+              }}
+            />
+
+          </td>
+
+          <td className="p-2">
+            -
+          </td>
+
+          <td className="p-2">
+            -
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+    <div className="flex justify-end bg-white border-t px-4 py-3">
+
+      <div className="w-[180px]">
+
+        <Button
+          type="button"
+          onClick={handleAddRow}
+          className="w-full"
+        >
+          Add Row
+        </Button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+         
+          
         </div>
       </div>
     </FormProvider>

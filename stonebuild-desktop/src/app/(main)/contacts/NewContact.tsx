@@ -224,6 +224,9 @@ const fillFormValues = (data: any) => {
                     type="input"
                     name="email"
                     placeholder="Enter Email"
+                     validation={
+                      validationRules.email
+                    }
                   />
                 </Row>
                 <Row label="Address">
@@ -239,6 +242,9 @@ const fillFormValues = (data: any) => {
                     name="pincode"
                     placeholder="Enter 6-Digit Pincode"
                     className="only-number no-space limit-6"
+                     validation={
+                      validationRules.pincode
+                    }
                   />
                 </Row>
                 <Row label="State">
@@ -311,6 +317,9 @@ const fillFormValues = (data: any) => {
                     name="aadhaar"
                     placeholder="Enter 12-Digit Aadhaar number"
                     className="only-number no-space limit-12"
+                     validation={
+                      validationRules.aadhaar
+                    }
                   />
                 </Row>
                 <Row label="PAN Number">
@@ -319,6 +328,9 @@ const fillFormValues = (data: any) => {
                     name="pan"
                     placeholder="Enter 10-Digit PAN number"
                     className="alphanumeric-uppercase no-space limit-10"
+                     validation={
+                      validationRules.pan
+                    }
                   />
                 </Row>
                 <Row label="Registeration ID">

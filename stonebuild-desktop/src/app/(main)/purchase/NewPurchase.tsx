@@ -13,6 +13,9 @@ import { Button } from "@/components/ui/button";
 
 import { theme } from "@/theme";
 
+import { ValidationRule } from "react-hook-form";
+import { validateDynamicRow } from "@/app/utils/validations";
+
 type PurchaseRow = {
   serialNo: number;
   medicineName: string;
@@ -50,6 +53,11 @@ const supplierData: Record<
 };
 
 export default function NewPurchase() {
+
+
+ const [rowErrors, setRowErrors] =
+  useState<Record<string, string>>({});
+
   const methods =
     useForm<FormValues>({
       defaultValues: {
@@ -83,66 +91,99 @@ export default function NewPurchase() {
   );
 };
 
-  const handleAddRow = () => {
-    const values =
-      methods.getValues();
+ const handleAddRow = () => {
 
-    const quantity =
-      Number(values.quantity);
+  const values =
+    methods.getValues();
 
-    const rate =
-      Number(values.rate);
+ const errors =
+  validateDynamicRow(values);
 
-    const tax =
-      Number(values.tax || 0);
+if (
+  Object.keys(errors).length > 0
+) {
 
-    const netRate =
-      rate + (rate * tax) / 100;
+  setRowErrors(errors);
 
-    const total =
-      quantity * netRate;
+  return;
+}
 
-    const newRow: PurchaseRow = {
-      serialNo:
-        rows.length + 1,
+  if (
+    Object.keys(errors).length > 0
+  ) {
 
-      medicineName:
-        values.medicine_name,
+    setRowErrors(errors);
 
-      unit: values.unit,
+    return;
+  }
 
-      quantity,
+  setRowErrors({});
 
-      rate,
+  const quantity =
+    Number(values.quantity);
 
-      tax,
+  const rate =
+    Number(values.rate);
 
-      netRate,
+  const tax =
+    Number(values.tax || 0);
 
-      total,
-    };
+  const netRate =
+    rate + (rate * tax) / 100;
 
-    setRows([
-      ...rows,
-      newRow,
-    ]);
+  const total =
+    quantity * netRate;
 
-    methods.setValue(
-      "medicine_name",
-      ""
-    );
+  const newRow: PurchaseRow = {
+    serialNo:
+      rows.length + 1,
 
-    methods.setValue("unit", "");
+    medicineName:
+      values.medicine_name,
 
-    methods.setValue(
-      "quantity",
-      ""
-    );
+    unit: values.unit,
 
-    methods.setValue("rate", "");
+    quantity,
 
-    methods.setValue("tax", "");
+    rate,
+
+    tax,
+
+    netRate,
+
+    total,
   };
+
+  setRows([
+    ...rows,
+    newRow,
+  ]);
+
+  methods.setValue(
+    "medicine_name",
+    ""
+  );
+
+  methods.setValue(
+    "unit",
+    ""
+  );
+
+  methods.setValue(
+    "quantity",
+    ""
+  );
+
+  methods.setValue(
+    "rate",
+    ""
+  );
+
+  methods.setValue(
+    "tax",
+    ""
+  );
+};
 
   const Row = ({
     label,
@@ -328,47 +369,192 @@ export default function NewPurchase() {
     {rows.length + 1}
   </td>
 
+  {/* MEDICINE */}
   <td className="p-2 w-[180px]">
+
     <FormField
       type="input"
       name="medicine_name"
       placeholder="Name"
+
+      className={`
+        only-alphabets capitalize
+        ${rowErrors.medicine_name ? "border-red-500" : ""}
+      `}
+      onChange={(value) => {
+
+        methods.setValue(
+          "medicine_name",
+          value
+        );
+
+        if (value.trim()) {
+
+          setRowErrors((prev) => {
+
+            const updated = {
+              ...prev,
+            };
+
+            delete updated.medicine_name;
+
+            return updated;
+          });
+        }
+      }}
     />
+
   </td>
 
+  {/* UNIT */}
   <td className="p-2 w-[110px]">
+
     <FormField
       type="input"
       name="unit"
       placeholder="Unit"
+      className={`
+        ${rowErrors.unit ? "border-red-500" : ""}
+      `}
+      onChange={(value) => {
+
+        methods.setValue(
+          "unit",
+          value
+        );
+
+        if (value.trim()) {
+
+          setRowErrors((prev) => {
+
+            const updated = {
+              ...prev,
+            };
+
+            delete updated.unit;
+
+            return updated;
+          });
+        }
+      }}
     />
+
   </td>
 
+  {/* QUANTITY */}
   <td className="p-2 w-[110px]">
+
     <FormField
       type="input"
       name="quantity"
       placeholder="Quantity"
-      className="only-number"
+      className={`
+        only-number
+        ${rowErrors.quantity ? "border-red-500" : ""}
+      `}
+      onChange={(value) => {
+
+        methods.setValue(
+          "quantity",
+          value
+        );
+
+        if (Number(value) > 0) {
+
+          setRowErrors((prev) => {
+
+            const updated = {
+              ...prev,
+            };
+
+            delete updated.quantity;
+
+            return updated;
+          });
+        }
+      }}
     />
+
   </td>
 
+  {/* RATE */}
   <td className="p-2 w-[110px]">
+
     <FormField
       type="input"
       name="rate"
       placeholder="Rate"
-      className="numbers-decimal"
+      className={`
+        numbers-decimal
+        ${rowErrors.rate ? "border-red-500" : ""}
+      `}
+      onChange={(value) => {
+
+        methods.setValue(
+          "rate",
+          value
+        );
+
+        if (Number(value) > 0) {
+
+          setRowErrors((prev) => {
+
+            const updated = {
+              ...prev,
+            };
+
+            delete updated.rate;
+
+            return updated;
+          });
+        }
+      }}
     />
+
   </td>
 
+  {/* TAX */}
   <td className="p-2 w-[110px]">
+
     <FormField
       type="input"
       name="tax"
       placeholder="Tax %"
-      className="numbers-decimal"
+      className={`
+        numbers-decimal
+        ${rowErrors.tax ? "border-red-500" : ""}
+      `}
+      onChange={(value) => {
+
+  const taxValue =
+    Number(value);
+
+  // allow only 0 - 100
+  if (
+    value !== "" &&
+    taxValue >= 0 &&
+    taxValue <= 100
+  ) {
+
+    methods.setValue(
+      "tax",
+      value
+    );
+
+    setRowErrors((prev) => {
+
+      const updated = {
+        ...prev,
+      };
+
+      delete updated.tax;
+
+      return updated;
+    });
+  }
+}}
     />
+
   </td>
 
   <td className="p-2">
@@ -378,6 +564,8 @@ export default function NewPurchase() {
   <td className="p-2">
     -
   </td>
+
+  
 
 </tr>
     </tbody>
