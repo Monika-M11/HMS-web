@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, Suspense, useEffect } from "react";
+import React, { useState, Suspense, useEffect, useMemo } from "react";
 import NewStaff from "./NewStaff";
 import { useSearchParams } from "next/navigation";
 
@@ -10,7 +10,9 @@ type TabKey = "entry" | "list";
 
 function StaffContent() {
   const searchParams = useSearchParams();
-  const editId = searchParams.get("edit-id");
+
+  // ✅ useMemo prevents editId reference changing on every render
+  const editId = useMemo(() => searchParams.get("edit-id"), [searchParams]);
 
   const [activeTab, setActiveTab] = useState<TabKey>("entry");
 

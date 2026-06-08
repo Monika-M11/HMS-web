@@ -44,6 +44,16 @@ const supplierOptions = [
   { label: "Global Health Supplies", value: "Global Health Supplies" },
 ];
 
+
+ const Row = ({ label, required = false, children }: { label: string; required?: boolean; children: React.ReactNode }) => (
+    <div className="flex items-center gap-4">
+      <label className="w-1/3 text-sm font-medium text-gray-600">
+        {label}{required && <span className="text-red-500 ml-1">*</span>}
+      </label>
+      <div className="w-2/3">{children}</div>
+    </div>
+  );
+
 export default function NewInventory({ editId }: NewInventoryProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -95,15 +105,7 @@ export default function NewInventory({ editId }: NewInventoryProps) {
     router.push(pathname);
   };
 
-  const Row = ({ label, required = false, children }: { label: string; required?: boolean; children: React.ReactNode }) => (
-    <div className="flex items-center gap-4">
-      <label className="w-1/3 text-sm font-medium text-gray-600">
-        {label}{required && <span className="text-red-500 ml-1">*</span>}
-      </label>
-      <div className="w-2/3">{children}</div>
-    </div>
-  );
-
+ 
   return (
     <FormProvider {...methods}>
       <form className="flex flex-col py-6" style={{ background: theme.background }}>

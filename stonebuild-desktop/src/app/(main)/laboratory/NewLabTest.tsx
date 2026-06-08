@@ -24,6 +24,15 @@ type FormValues = {
 
 type NewLabTestProps = { editId: string | null };
 
+  const Row = ({ label, required = false, children }: { label: string; required?: boolean; children: React.ReactNode }) => (
+    <div className="flex items-center gap-4">
+      <label className="w-1/3 text-sm font-medium text-gray-600">
+        {label}{required && <span className="text-red-500 ml-1">*</span>}
+      </label>
+      <div className="w-2/3">{children}</div>
+    </div>
+  );
+
 export default function NewLabTest({ editId }: NewLabTestProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -75,14 +84,7 @@ export default function NewLabTest({ editId }: NewLabTestProps) {
     router.push(pathname);
   };
 
-  const Row = ({ label, required = false, children }: { label: string; required?: boolean; children: React.ReactNode }) => (
-    <div className="flex items-center gap-4">
-      <label className="w-1/3 text-sm font-medium text-gray-600">
-        {label}{required && <span className="text-red-500 ml-1">*</span>}
-      </label>
-      <div className="w-2/3">{children}</div>
-    </div>
-  );
+
 
   return (
     <FormProvider {...methods}>

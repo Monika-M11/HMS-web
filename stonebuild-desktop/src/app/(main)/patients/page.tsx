@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, Suspense } from "react";
+import React, { useEffect, useState, Suspense,useMemo } from "react";
 import ContactForm from "./NewContact";
 import { useSearchParams } from "next/navigation";
 
@@ -10,7 +10,9 @@ type TabKey = "entry" | "list";
 
 function PatientsContent() {
   const searchParams = useSearchParams();
-  const editId = searchParams.get("edit-id");
+  // ✅ useMemo prevents editId reference changing on every render
+  const editId = useMemo(() => searchParams.get("edit-id"), [searchParams]);
+  
 
   const [activeTab, setActiveTab] = useState<TabKey>("entry");
 

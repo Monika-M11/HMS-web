@@ -58,20 +58,6 @@ const departmentOptions = [
   },
 ];
 
-export default function NewBooking() {
-
-  const methods =
-    useForm<FormValues>({
-      defaultValues: {
-        appointment_id: "",
-        patient: "",
-        doctor: "",
-        department: "",
-        date: "",
-        time: "",
-        remarks: "",
-      },
-    });
 
   const Row = ({
     label,
@@ -98,6 +84,23 @@ export default function NewBooking() {
 
     </div>
   );
+
+export default function NewBooking() {
+
+  const methods =
+    useForm<FormValues>({
+      defaultValues: {
+        appointment_id: "",
+        patient: "",
+        doctor: "",
+        department: "",
+        date: "",
+        time: "",
+        remarks: "",
+      },
+    });
+
+
 
   return (
     <FormProvider {...methods}>

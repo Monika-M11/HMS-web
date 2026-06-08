@@ -1,7 +1,7 @@
- "use client";
+"use client";
 
 import * as React from "react";
-import { Controller, useFormContext, RegisterOptions } from "react-hook-form";
+import { Controller, useFormContext, useWatch, RegisterOptions } from "react-hook-form";
 import {
   Command,
   CommandEmpty,
@@ -13,7 +13,6 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { ChevronsUpDown } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 type Option = {
   label: string;
@@ -26,19 +25,20 @@ type Props = {
   options: Option[];
   placeholder?: string;
   validation?: RegisterOptions;
-   onChange?: (value: string) => void; // ✅ add this
+  onChange?: (value: string) => void;
 };
- export const TypeaheadField = ({ name, options, placeholder, validation, onChange }: Props) => {
-  const { control, setValue, watch } = useFormContext();
-  const [open, setOpen] = React.useState(false);
-  const fieldValue = watch(name);
 
-  // ✅ Proper useEffect — outside render
+export const TypeaheadField = ({ name, options, placeholder, validation, onChange }: Props) => {
+  const { control, setValue } = useFormContext();
+  const [open, setOpen] = React.useState(false);
+
+  // ✅ useWatch instead of watch — only re-renders THIS component, not the whole form
+  const fieldValue = useWatch({ control, name });
+
   React.useEffect(() => {
     if (options.length > 0 && fieldValue) {
       const match = options.find((opt) => String(opt.value) === String(fieldValue));
       if (!match) {
-        // If the current fieldValue isn't valid anymore, reset it
         setValue(name, "");
       }
     }
@@ -89,14 +89,11 @@ type Props = {
                       <CommandItem
                         key={opt.value}
                         onSelect={() => {
-  field.onChange(opt.value);
-
-  setValue(name, opt.value);
-
-  onChange?.(opt.value);
-
-  setOpen(false);
-}} 
+                          field.onChange(opt.value);
+                          setValue(name, opt.value);
+                          onChange?.(opt.value);
+                          setOpen(false);
+                        }}
                       >
                         <div className="flex flex-col">
                           <span className="text-[15px]">{opt.label}</span>
@@ -118,4 +115,3 @@ type Props = {
     />
   );
 };
-
