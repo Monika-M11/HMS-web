@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, Suspense, useEffect } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import NewIPD from "./NewIPD";
 import { useSearchParams } from "next/navigation";
 
@@ -45,6 +45,7 @@ function IPDContent() {
 
       <div>
         {activeTab === "entry" && <NewIPD editId={editId} />}
+
         {activeTab === "list" && (
           <Suspense fallback={<div>Loading IPD admissions...</div>}>
             <IPDList />
@@ -62,3 +63,4 @@ export default function Page() {
     </Suspense>
   );
 }
+

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, Suspense, useEffect } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import ContactForm from "./NewContact";
 import { useSearchParams } from "next/navigation";
 
@@ -8,21 +8,18 @@ const ContactList = React.lazy(() => import("./ContactList"));
 
 type TabKey = "entry" | "list";
 
-export default function Page() {
+function PatientsContent() {
   const searchParams = useSearchParams();
   const editId = searchParams.get("edit-id");
 
   const [activeTab, setActiveTab] = useState<TabKey>("entry");
 
   useEffect(() => {
-    if (editId) {
-      setActiveTab("entry");
-    }
+    if (editId) setActiveTab("entry");
   }, [editId]);
 
   return (
     <div className="">
-      {/* Tabs */}
       <div className="flex border-b border-gray-300">
         <button
           onClick={() => setActiveTab("entry")}
@@ -47,7 +44,6 @@ export default function Page() {
         </button>
       </div>
 
-      {/* Tab Content */}
       <div>
         {activeTab === "entry" && <ContactForm editId={editId} />}
 
@@ -60,3 +56,13 @@ export default function Page() {
     </div>
   );
 }
+
+export default function Page() {
+  // Next.js requires that pages/components using `useSearchParams()` are under a Suspense boundary.
+  return (
+    <Suspense fallback={<div className="p-8">Loading patients page...</div>}>
+      <PatientsContent />
+    </Suspense>
+  );
+}
+

@@ -25,8 +25,8 @@ export default function Page() {
           onClick={() => setActiveTab("entry")}
           className={`px-6 py-3 font-medium transition-all ${
             activeTab === "entry"
-              ? "border-b-2 border-[#103BB5] text-[#103BB5]"
-              : "text-gray-500 hover:text-[#103BB5]"
+              ? "border-b-2 text-[#0E7FAB] border-[#0E7FAB]"
+              : "text-gray-500"
           }`}
         >
           New Staff
@@ -35,8 +35,8 @@ export default function Page() {
           onClick={() => setActiveTab("list")}
           className={`px-6 py-3 font-medium transition-all ${
             activeTab === "list"
-              ? "border-b-2 border-[#103BB5] text-[#103BB5]"
-              : "text-gray-500 hover:text-[#103BB5]"
+               ? "border-b-2 text-[#0E7FAB] border-[#0E7FAB]"
+              : "text-gray-500"
           }`}
         >
           Staff List
