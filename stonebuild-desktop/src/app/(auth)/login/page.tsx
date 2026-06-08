@@ -83,7 +83,7 @@ const handleLogin = async (e: React.FormEvent) => {
         className="bg-white p-8 rounded-2xl shadow-md w-full max-w-sm"
       >
         <h1 className="text-2xl font-semibold text-center text-[#103BB5] mb-6">
-          Stonebuild Admin Login
+          Healthcare Admin Login
         </h1>
 
         <div className="mb-4">

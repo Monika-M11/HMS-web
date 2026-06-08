@@ -1,101 +1,140 @@
- "use client";
+"use client";
 
-const KPICard = ({
-  title,
-  value,
-  subtitle,
-  color = "blue",
-}: {
-  title: string;
-  value: string;
-  subtitle?: string;
-  color?: "blue" | "green" | "red" | "purple";
-}) => {
-  const colorClasses = {
-    blue: "bg-blue-50 border-blue-200 text-blue-700",
-    green: "bg-green-50 border-green-200 text-green-700",
-    red: "bg-red-50 border-red-200 text-red-700",
-    purple: "bg-purple-50 border-purple-200 text-purple-700",
-  };
+import { KPICard } from "./KPICard";// We'll create this reusable component
+import { theme } from "@/theme";
+import { CalendarCheck, UserCheck, TrendingUp, Bed, Clock, Bell } from "lucide-react";
 
-  return (
-    <div className={`p-6 rounded-lg border-2 ${colorClasses[color]} hover:shadow-md`}>
-      <h3 className="text-sm font-medium opacity-80">{title}</h3>
-      <p className="text-2xl font-bold mt-2">{value}</p>
-      {subtitle && <p className="text-sm mt-1 opacity-75">{subtitle}</p>}
-    </div>
-  );
-};
+const recentAppointments = [
+  { patient: " Sharma", doctor: "Dr. John Mathews", time: "10:30 AM", status: "Completed" },
+  { patient: "Rahul Verma", doctor: "Dr. Priya Sharma", time: "11:45 AM", status: "In Progress" },
+  { patient: "Priya Nair", doctor: "Dr. Ram Kumar", time: "02:00 PM", status: "Scheduled" },
+];
+
+const notifications = [
+  { message: "Bed #A12 in General Ward is now vacant", time: "2 min ago" },
+  { message: "Dr. John requested leave for tomorrow", time: "15 min ago" },
+  { message: "Lab report for patient PAT003 is ready", time: "45 min ago" },
+];
 
 export default function DashboardPage() {
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-50 p-6" style={{ background: theme.background }}>
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+       
 
-      {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-        <KPICard
-          title="Total Outstanding"
-          value="₹2,50,000"
-          subtitle="Across all customers"
-          color="purple"
-        />
-        <KPICard
-          title="Total Principal"
-          value="₹1,80,000"
-          subtitle="Principal amount"
-          color="blue"
-        />
-        <KPICard
-          title="Total Interest"
-          value="₹70,000"
-          subtitle="Accrued interest"
-          color="green"
-        />
-        <KPICard
-          title="Active Customers"
-          value="24"
-          subtitle="36 total loans"
-          color="red"
-        />
+        {/* KPI Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <KPICard
+            title="Today's Appointments"
+            value="86"
+            subtitle="24 Completed"
+            color="blue"
+            icon={<CalendarCheck size={24} />}
+          />
+          <KPICard
+            title="Admissions"
+            value="12"
+            subtitle="Today"
+            color="green"
+            icon={<UserCheck size={24} />}
+          />
+          <KPICard
+            title="Discharges"
+            value="8"
+            subtitle="Today"
+            color="purple"
+            icon={<TrendingUp size={24} />}
+          />
+          <KPICard
+            title="Revenue Today"
+            value="₹1,48,750"
+            subtitle="+12% from yesterday"
+            color="green"
+            icon={<TrendingUp size={24} />}
+          />
+        </div>
+
+        {/* Second Row KPIs */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <KPICard
+            title="Doctor Availability"
+            value="18 / 24"
+            subtitle="On Duty"
+            color="green"
+            icon={<Clock size={24} />}
+          />
+          <KPICard
+            title="Bed Occupancy"
+            value="78%"
+            subtitle="142 / 182 beds occupied"
+            color="blue"
+            icon={<Bed size={24} />}
+          />
+          <KPICard
+            title="Pending Lab Reports"
+            value="19"
+            subtitle="Awaiting review"
+            color="red"
+          />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-7 gap-6">
+          {/* Recent Appointments */}
+          <div className="lg:col-span-4 bg-white rounded-2xl shadow p-6">
+            <h2 className="text-xl font-semibold mb-4 flex items-center gap-2" style={{ color: theme.primaryDark }}>
+              <CalendarCheck size={22} /> Today's Appointments
+            </h2>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b">
+                    <th className="text-left py-3">Patient</th>
+                    <th className="text-left py-3">Doctor</th>
+                    <th className="text-left py-3">Time</th>
+                    <th className="text-left py-3">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {recentAppointments.map((app, idx) => (
+                    <tr key={idx} className="border-b last:border-0 hover:bg-gray-50">
+                      <td className="py-3">{app.patient}</td>
+                      <td className="py-3">{app.doctor}</td>
+                      <td className="py-3">{app.time}</td>
+                      <td className="py-3">
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                          app.status === "Completed" ? "bg-green-100 text-green-700" :
+                          app.status === "In Progress" ? "bg-blue-100 text-blue-700" : "bg-yellow-100 text-yellow-700"
+                        }`}>
+                          {app.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Notifications */}
+          <div className="lg:col-span-3 bg-white rounded-2xl shadow p-6">
+            <h2 className="text-xl font-semibold mb-4 flex items-center gap-2" style={{ color: theme.primaryDark }}>
+              <Bell size={22} /> Notifications
+            </h2>
+            <div className="space-y-4">
+              {notifications.map((notif, idx) => (
+                <div key={idx} className="flex gap-3 p-3 bg-gray-50 rounded-xl">
+                  <div className="w-2 h-2 rounded-full bg-blue-500 mt-2"></div>
+                  <div>
+                    <p className="text-sm">{notif.message}</p>
+                    <p className="text-xs text-gray-500 mt-1">{notif.time}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
-
-      {/* Simple Table */}
-      <div className="bg-white rounded-lg shadow p-4">
-        <h2 className="text-lg font-semibold mb-4">Recent Loans</h2>
-
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="text-left border-b">
-              <th className="py-2">Customer</th>
-              <th>Loan Type</th>
-              <th>Amount</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr className="border-b">
-              <td className="py-2">John</td>
-              <td>Personal</td>
-              <td>₹50,000</td>
-              <td className="text-green-600">Active</td>
-            </tr>
-            <tr className="border-b">
-              <td className="py-2">Ravi</td>
-              <td>Jewel</td>
-              <td>₹75,000</td>
-              <td className="text-red-600">Overdue</td>
-            </tr>
-            <tr>
-              <td className="py-2">Arun</td>
-              <td>Personal</td>
-              <td>₹30,000</td>
-              <td className="text-yellow-600">Pending</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
     </div>
   );
 }

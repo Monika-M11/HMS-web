@@ -33,60 +33,131 @@ export default function MainLayout({
 
   if (
     pathname.startsWith(
-      "/contacts"
+      "/patients"
     )
   ) {
-    return "Contacts";
-  }
-
-  if (
-    pathname.startsWith(
-      "/items"
-    )
-  ) {
-    return "Items";
-  }
-
-  if (
-    pathname.startsWith(
-      "/purchase"
-    )
-  ) {
-    return "Purchase";
-  }
-
-  if (
-    pathname.startsWith(
-      "/sales"
-    )
-  ) {
-    return "Sales";
-  }
-
-  if (
-    pathname.startsWith(
-      "/staffs"
-    )
-  ) {
-    return "Staffs";
-  }
-
-  if (
-    pathname.startsWith(
-      "/bookings"
-    )
-  ) {
-    return "Bookings";
+    return "Patients";
   }
 
     if (
     pathname.startsWith(
-      "/consultation"
+      "/doctors"
     )
   ) {
-    return "Consultation";
+    return "Doctors";
   }
 
+   if (
+    pathname.startsWith(
+      "/nurses-staff"
+    )
+  ) {
+    return "Nurses-Staff";
+  }
+
+   if (
+    pathname.startsWith(
+      "/laboratory"
+    )
+  ) {
+    return "Laboratory";
+  }
+
+  if (
+    pathname.startsWith(
+      "/billing"
+    )
+  ) {
+    return "Billings";
+  }
+
+    if (
+    pathname.startsWith(
+      "/insurance"
+    )
+  ) {
+    return "Insurance";
+  }
+
+    if (
+    pathname.startsWith(
+      "/inventory"
+    )
+  ) {
+    return "Inventory";
+  }
+  // if (
+  //   pathname.startsWith(
+  //     "/items"
+  //   )
+  // ) {
+  //   return "Items";
+  // }
+
+  // if (
+  //   pathname.startsWith(
+  //     "/purchase"
+  //   )
+  // ) {
+  //   return "Purchase";
+  // }
+
+  // if (
+  //   pathname.startsWith(
+  //     "/sales"
+  //   )
+  // ) {
+  //   return "Sales";
+  // }
+
+  // if (
+  //   pathname.startsWith(
+  //     "/staffs"
+  //   )
+  // ) {
+  //   return "Staffs";
+  // }
+
+  if (
+    pathname.startsWith(
+      "/appointment"
+    )
+  ) {
+    return "Appointments";
+  }
+
+  //   if (
+  //   pathname.startsWith(
+  //     "/consultation"
+  //   )
+  // ) {
+  //   return "Consultation";
+  // }
+
+
+     if (
+    pathname.startsWith(
+      "/opd"
+    )
+  ) {
+    return "Out Patient";
+  }
+
+    if (
+    pathname.startsWith(
+      "/ipd"
+    )
+  ) {
+    return "In-Patient";
+  }
+
+  if (
+    pathname.startsWith(
+      "/pharmacy"
+    )
+  ) {
+    return "Pharmacy";
+  }
   switch (pathname) {
 
     case "/dashboard":
