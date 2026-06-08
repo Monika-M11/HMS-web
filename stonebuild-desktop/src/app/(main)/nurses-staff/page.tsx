@@ -8,7 +8,7 @@ const StaffList = React.lazy(() => import("./StaffList"));
 
 type TabKey = "entry" | "list";
 
-export default function Page() {
+function StaffContent() {
   const searchParams = useSearchParams();
   const editId = searchParams.get("edit-id");
 
@@ -35,7 +35,7 @@ export default function Page() {
           onClick={() => setActiveTab("list")}
           className={`px-6 py-3 font-medium transition-all ${
             activeTab === "list"
-               ? "border-b-2 text-[#0E7FAB] border-[#0E7FAB]"
+              ? "border-b-2 text-[#0E7FAB] border-[#0E7FAB]"
               : "text-gray-500"
           }`}
         >
@@ -52,5 +52,13 @@ export default function Page() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div className="p-8">Loading Staff page...</div>}>
+      <StaffContent />
+    </Suspense>
   );
 }

@@ -8,7 +8,7 @@ const OPDList = React.lazy(() => import("./OPDList"));
 
 type TabKey = "entry" | "list";
 
-export default function Page() {
+function OPDContent() {
   const searchParams = useSearchParams();
   const editId = searchParams.get("edit-id");
 
@@ -25,7 +25,7 @@ export default function Page() {
           onClick={() => setActiveTab("entry")}
           className={`px-6 py-3 font-medium transition-all ${
             activeTab === "entry"
-               ? "border-b-2 text-[#0E7FAB] border-[#0E7FAB]"
+              ? "border-b-2 text-[#0E7FAB] border-[#0E7FAB]"
               : "text-gray-500"
           }`}
         >
@@ -52,5 +52,13 @@ export default function Page() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div className="p-8">Loading OPD page...</div>}>
+      <OPDContent />
+    </Suspense>
   );
 }

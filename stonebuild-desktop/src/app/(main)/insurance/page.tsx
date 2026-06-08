@@ -8,7 +8,7 @@ const InsuranceList = React.lazy(() => import("./InsuranceList"));
 
 type TabKey = "entry" | "list";
 
-export default function Page() {
+function InsuranceContent() {
   const searchParams = useSearchParams();
   const editId = searchParams.get("edit-id");
 
@@ -29,7 +29,7 @@ export default function Page() {
               : "text-gray-500"
           }`}
         >
-          New Insurance Policy
+          New Insurance
         </button>
         <button
           onClick={() => setActiveTab("list")}
@@ -39,18 +39,26 @@ export default function Page() {
               : "text-gray-500"
           }`}
         >
-          Insurance Policies List
+          Insurance List 
         </button>
       </div>
 
       <div>
         {activeTab === "entry" && <NewInsurance editId={editId} />}
         {activeTab === "list" && (
-          <Suspense fallback={<div>Loading insurance policies...</div>}>
+          <Suspense fallback={<div>Loading Insurance...</div>}>
             <InsuranceList />
           </Suspense>
         )}
       </div>
     </div>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div className="p-8">Loading Insurance page...</div>}>
+      <InsuranceContent />
+    </Suspense>
   );
 }

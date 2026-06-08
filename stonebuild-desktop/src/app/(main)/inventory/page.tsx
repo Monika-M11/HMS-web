@@ -8,7 +8,7 @@ const InventoryList = React.lazy(() => import("./InventoryList"));
 
 type TabKey = "entry" | "list";
 
-export default function Page() {
+function InventoryContent() {
   const searchParams = useSearchParams();
   const editId = searchParams.get("edit-id");
 
@@ -31,11 +31,12 @@ export default function Page() {
         >
           New Inventory Item
         </button>
+
         <button
           onClick={() => setActiveTab("list")}
           className={`px-6 py-3 font-medium transition-all ${
             activeTab === "list"
-               ? "border-b-2 text-[#0E7FAB] border-[#0E7FAB]"
+              ? "border-b-2 text-[#0E7FAB] border-[#0E7FAB]"
               : "text-gray-500"
           }`}
         >
@@ -45,6 +46,7 @@ export default function Page() {
 
       <div>
         {activeTab === "entry" && <NewInventory editId={editId} />}
+
         {activeTab === "list" && (
           <Suspense fallback={<div>Loading inventory...</div>}>
             <InventoryList />
@@ -52,5 +54,13 @@ export default function Page() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div className="p-8">Loading Inventory page...</div>}>
+      <InventoryContent />
+    </Suspense>
   );
 }

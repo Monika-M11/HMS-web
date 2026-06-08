@@ -8,7 +8,7 @@ const DoctorList = React.lazy(() => import("./doctorList"));
 
 type TabKey = "entry" | "list";
 
-export default function Page() {
+function DoctorsContent() {
   const searchParams = useSearchParams();
   const editId = searchParams.get("edit-id");
 
@@ -25,8 +25,8 @@ export default function Page() {
           onClick={() => setActiveTab("entry")}
           className={`px-6 py-3 font-medium transition-all ${
             activeTab === "entry"
-              ? "border-b-2 text-[#0E7FAB] border-[#0E7FAB]"
-              : "text-gray-500"
+              ? "border-b-2 border-[#103BB5] text-[#103BB5]"
+              : "text-gray-500 hover:text-[#103BB5]"
           }`}
         >
           New Doctor
@@ -35,8 +35,8 @@ export default function Page() {
           onClick={() => setActiveTab("list")}
           className={`px-6 py-3 font-medium transition-all ${
             activeTab === "list"
-               ? "border-b-2 text-[#0E7FAB] border-[#0E7FAB]"
-              : "text-gray-500"
+              ? "border-b-2 border-[#103BB5] text-[#103BB5]"
+              : "text-gray-500 hover:text-[#103BB5]"
           }`}
         >
           Doctors List
@@ -52,5 +52,13 @@ export default function Page() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div className="p-8">Loading Doctors Page...</div>}>
+      <DoctorsContent />
+    </Suspense>
   );
 }
